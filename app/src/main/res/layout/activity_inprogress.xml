@@ -225,18 +225,20 @@
             android:layout_height="match_parent"
             android:layout_below="@id/optionButtons"
             android:layout_centerInParent="true">
-            <Button
+            <ImageButton
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_margin="4dp"
                 android:background="@drawable/fbbutton"
+                android:src="@drawable/facebooklogo"
                 android:onClick="facebookAccess"/>
 
-            <Button
+            <ImageButton
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_margin="4dp"
                 android:background="@drawable/twitterbutton"
+                android:src="@drawable/twitterbird"
                 android:onClick="twitterAccess"/>
         </LinearLayout>
     </RelativeLayout>
