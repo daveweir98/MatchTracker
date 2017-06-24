@@ -1,16 +1,40 @@
 package com.example.android.matchtracker;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import static android.R.attr.name;
@@ -18,6 +42,7 @@ import static com.example.android.matchtracker.R.id.TeamAName;
 import static com.example.android.matchtracker.R.id.TeamBName;
 import static com.example.android.matchtracker.R.id.reset;
 import static com.example.android.matchtracker.R.id.timer;
+import static java.lang.System.out;
 
 public class InProgressActivity extends AppCompatActivity {
     // Name and score variables
@@ -55,6 +80,8 @@ public class InProgressActivity extends AppCompatActivity {
         String BName = getIntent().getStringExtra("teamBName");
         nameB = BName.toUpperCase();
         teamB.setText(BName);
+
+        Twitter.initialize(this);
 
     }
     // Team A score updated on screen
@@ -193,6 +220,7 @@ public class InProgressActivity extends AppCompatActivity {
     public void timerPause(View view){
         timer.stop();
         lastStop = SystemClock.elapsedRealtime();
+        timer.setBase(SystemClock.elapsedRealtime());
         useStart = true;
     }
 
@@ -210,11 +238,48 @@ public class InProgressActivity extends AppCompatActivity {
         startActivity(scoreIntent);
     }
 
+    // Facebook posting
     public void facebookAccess(View view){
         Toast.makeText(this, "access facebook hopefully", Toast.LENGTH_SHORT).show();
     }
 
+    // Twitter posting
     public void twitterAccess(View view){
         Toast.makeText(this, "access twitter hopefully", Toast.LENGTH_SHORT).show();
+
+        // Take screenshot
+        Bitmap bitty = screenshot();
+        saveBitmap(bitty);
+
+        // Produce image uri
+        File imagePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/screenshot.png");
+        Uri imageUri = Uri.fromFile(imagePath);
+
+        TweetComposer.Builder builder = new TweetComposer.Builder(this).image(imageUri);
+        builder.show();
     }
+
+    // Take screenshot of current activity
+    public Bitmap screenshot() {
+        View rootView = findViewById(android.R.id.content).getRootView();
+        rootView.setDrawingCacheEnabled(true);
+        return rootView.getDrawingCache();
+    }
+
+    // save screenshot to pictures on phone
+    public void saveBitmap(Bitmap bitmap) {
+        File imagePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/screenshot.png");
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(imagePath);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.e("GREC", e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e("GREC", e.getMessage(), e);
+        }
+    }
+
 }
