@@ -3,13 +3,10 @@ package com.example.android.matchtracker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import java.util.ArrayList;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by david on 31/05/17.
