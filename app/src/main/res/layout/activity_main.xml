@@ -24,6 +24,7 @@
         android:id="@+id/TeamAName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
         android:maxLength="14"
         android:maxLines="1" />
 
@@ -37,6 +38,7 @@
         android:id="@+id/TeamBName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
         android:maxLength="14"
         android:maxLines="1"/>
 

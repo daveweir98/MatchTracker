@@ -3,18 +3,22 @@ package com.example.android.matchtracker;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +28,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.share.ShareApi;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -34,15 +48,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static android.R.attr.name;
 import static com.example.android.matchtracker.R.id.TeamAName;
 import static com.example.android.matchtracker.R.id.TeamBName;
+import static com.example.android.matchtracker.R.id.image;
 import static com.example.android.matchtracker.R.id.reset;
 import static com.example.android.matchtracker.R.id.timer;
 import static java.lang.System.out;
+import com.facebook.FacebookSdk;
 
 public class InProgressActivity extends AppCompatActivity {
     // Name and score variables
@@ -82,6 +102,7 @@ public class InProgressActivity extends AppCompatActivity {
         teamB.setText(BName);
 
         Twitter.initialize(this);
+
 
     }
     // Team A score updated on screen
@@ -241,6 +262,18 @@ public class InProgressActivity extends AppCompatActivity {
     // Facebook posting
     public void facebookAccess(View view){
         Toast.makeText(this, "access facebook hopefully", Toast.LENGTH_SHORT).show();
+
+        ShareDialog sd = new ShareDialog(this);
+
+        // Take screenshot
+        Bitmap bitty = screenshot();
+
+        // Share photo to facebook
+        SharePhoto photo = new SharePhoto.Builder().setBitmap(bitty).build();
+        SharePhotoContent content = new SharePhotoContent.Builder().addPhoto(photo).build();
+        sd.show(this, content);
+
+
     }
 
     // Twitter posting
@@ -252,7 +285,7 @@ public class InProgressActivity extends AppCompatActivity {
         saveBitmap(bitty);
 
         // Produce image uri
-        File imagePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/screenshot.png");
+        File imagePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"screenshot");
         Uri imageUri = Uri.fromFile(imagePath);
 
         TweetComposer.Builder builder = new TweetComposer.Builder(this).image(imageUri);
@@ -261,25 +294,24 @@ public class InProgressActivity extends AppCompatActivity {
 
     // Take screenshot of current activity
     public Bitmap screenshot() {
-        View rootView = findViewById(android.R.id.content).getRootView();
+
+        View rootView = getWindow().getDecorView().getRootView();
         rootView.setDrawingCacheEnabled(true);
-        return rootView.getDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(rootView.getDrawingCache());
+        rootView.setDrawingCacheEnabled(false);
+        return bitmap;
     }
 
     // save screenshot to pictures on phone
     public void saveBitmap(Bitmap bitmap) {
-        File imagePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/screenshot.png");
-        FileOutputStream fos;
+        File imagePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"screenshot");
         try {
-            fos = new FileOutputStream(imagePath);
+            FileOutputStream fos = new FileOutputStream(imagePath);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-        } catch (FileNotFoundException e) {
-            Log.e("GREC", e.getMessage(), e);
-        } catch (IOException e) {
-            Log.e("GREC", e.getMessage(), e);
+        } catch (Throwable e) {
+            Log.e("Not Good", e.getMessage(), e);
         }
     }
-
 }

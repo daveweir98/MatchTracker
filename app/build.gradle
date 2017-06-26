@@ -31,4 +31,7 @@ dependencies {
     compile 'com.twitter.sdk.android:twitter:3.0.0'
     // (Optional) Monetize using mopub
     compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
+
+    //Facebook
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
