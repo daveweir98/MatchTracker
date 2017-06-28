@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
@@ -222,7 +222,7 @@ public class InProgressActivity extends AppCompatActivity {
 
     // Facebook posting
     public void facebookAccess(View view){
-        Toast.makeText(this, "access facebook hopefully", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "access facebook hopefully", Toast.LENGTH_SHORT).show();
 
         ShareDialog sd = new ShareDialog(this);
 
@@ -239,7 +239,7 @@ public class InProgressActivity extends AppCompatActivity {
 
     // Twitter posting
     public void twitterAccess(View view){
-        Toast.makeText(this, "access twitter hopefully", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "access twitter hopefully", Toast.LENGTH_SHORT).show();
 
         // Take screenshot
         Bitmap bitty = screenshot();
@@ -272,7 +272,7 @@ public class InProgressActivity extends AppCompatActivity {
             fos.flush();
             fos.close();
         } catch (Throwable e) {
-            Log.e("Not Good", e.getMessage(), e);
+            //Log.e("Not Good", e.getMessage(), e);
         }
     }
 }
