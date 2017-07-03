@@ -87,8 +87,8 @@ public class InProgressActivity extends AppCompatActivity {
             goalsA += 1;
             displayForTeamA();
             // Calculate time scored, and add to score log
-            long min = (timeMili/1000)/60;
-            long seconds = (timeMili/1000);
+            long min = (timeMili / (1000*60) % 60);
+            long seconds = ((timeMili/1000) % 60);
             scores.add(nameA + ": Goal at " + (String.format("%02d",min) + ":" + String.format("%02d",seconds)));
         }
     }
@@ -103,8 +103,8 @@ public class InProgressActivity extends AppCompatActivity {
             pointsA += 1;
             displayForTeamA();
             // Calculate time scored, and add to score log
-            long min = (timeMili/1000)/60;
-            long seconds = (timeMili/1000);
+            long min = (timeMili / (1000*60) % 60);
+            long seconds = ((timeMili/1000) % 60);
             scores.add(nameA + ": Point at " + (String.format("%02d",min) + ":" + String.format("%02d",seconds)));
         }
     }
@@ -128,8 +128,8 @@ public class InProgressActivity extends AppCompatActivity {
             goalsB += 1;
             displayForTeamB();
             // Calculate time scored, and add to score log
-            long min = (timeMili/1000)/60;
-            long seconds = (timeMili/1000);
+            long min = (timeMili / (1000*60) % 60);
+            long seconds = ((timeMili/1000) % 60);
             scores.add(nameB + ": Goal at " + (String.format("%02d",min) + ":" + String.format("%02d",seconds)));
         }
     }
@@ -144,8 +144,8 @@ public class InProgressActivity extends AppCompatActivity {
             pointsB += 1;
             displayForTeamB();
             // Calculate time scored, and add to score log
-            long min = (timeMili/1000)/60;
-            long seconds = (timeMili/1000);
+            long min = (timeMili / (1000*60) % 60);
+            long seconds = ((timeMili/1000) % 60);
             scores.add(nameB + ": Point at " + (String.format("%02d",min) + ":" + String.format("%02d",seconds)));
         }
     }
