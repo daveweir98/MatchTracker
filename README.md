@@ -1,7 +1,7 @@
 # MatchTracker
 Match tracker/score keeper android app for GAA matches.
 
-Download: https://daveweir98.github.io/app-download
+Download: https://github.com/daveweir98/MatchTracker/releases
 ## Landing Page
  
 This activity is shown on start-up. The user must enter the name of the two teams at this point.
